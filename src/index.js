@@ -1,17 +1,20 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import Example from './ClickApp';
-import User from './Title';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import reportWebVitals from "./reportWebVitals";
+import Form1 from "./form1";
+import Form2 from "./form2";
+import Form3 from "./form3";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <Example />
-    <App />
-    <User />
+    <p>Using useState hook</p>
+    <Form1 />
+    <p>Using useRef hook</p>
+    <Form2 />
+    <p>Using React hook form</p>
+    <Form3/>
   </React.StrictMode>
 );
 
