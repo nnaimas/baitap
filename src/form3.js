@@ -4,7 +4,7 @@ export default function Form3() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors }, 
   } = useForm();
 
   const onSubmit = (data) => {
