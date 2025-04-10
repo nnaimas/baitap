@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
-const UseFetch = () => {
+function UseAxios() {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -14,10 +15,26 @@ const UseFetch = () => {
         }
         return response.json();
       })
-      .then((data) => setData(data))
-      .catch(() => setError("Failed to fetch data."))
-      .finally(() => setLoading(false));
+      .then((data) => {
+        setData(data);
+        setFilteredData(data);
+      })
+      .catch(() => {
+        setError("Failed to fetch data.");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
+
+  const handleSearch = (e) => {
+    setSearch(e)
+    setFilteredData(
+      data.filter((country) =>
+        country.regiontoLowerCase().includes(search.toLowerCase())
+      )
+    );
+  };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
@@ -27,21 +44,38 @@ const UseFetch = () => {
       <h1>Countries</h1>
       <input
         type="text"
-        placeholder="Search country..."
+        placeholder="Search res..."
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
-      <ul>
-        {data
-          .filter((country) =>
-            country.name.common.toLowerCase().includes(search.toLowerCase())
-          )
-          .map((country, index) => (
-            <li key={index}>{country.name.common}</li>
+      <button onClick={handleSearch}>Search</button>
+      <table
+        border="1"
+        style={{ marginTop: "20px", width: "100%", textAlign: "left" }}
+      >
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Languages</th>
+            <th>Area (km²)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredData.map((country, index) => (
+            <tr key={index}>
+              <td>{country.name.common}</td>
+              <td>
+                {country.languages
+                  ? Object.values(country.languages).join(", ")
+                  : "N/A"}
+              </td>
+              <td>{country.area.toLocaleString()}</td>
+            </tr>
           ))}
-      </ul>
+        </tbody>
+      </table>
     </div>
   );
-};
+}
 
-export default UseFetch;
+export default UseAxios;

@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const UseAxios = () => {
+function UseAxios() {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -12,6 +13,7 @@ const UseAxios = () => {
       .get("https://restcountries.com/v3.1/all")
       .then((response) => {
         setData(response.data);
+        setFilteredData(response.data);
       })
       .catch(() => {
         setError("Failed to fetch data.");
@@ -20,6 +22,14 @@ const UseAxios = () => {
         setLoading(false);
       });
   }, []);
+
+  const handleSearch = () => {
+    setFilteredData(
+      data.filter((country) =>
+        country.name.common.toLowerCase().includes(search.toLowerCase())
+      )
+    );
+  };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
@@ -33,17 +43,35 @@ const UseAxios = () => {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
-      <ul>
-        {data
-          .filter((country) =>
-            country.name.common.toLowerCase().includes(search.toLowerCase())
-          )
-          .map((country, index) => (
-            <li key={index}>{country.name.common}</li>
+      <button onClick={handleSearch}>Search</button>
+
+      <table
+        border="1"
+        style={{ marginTop: "20px", width: "100%", textAlign: "left" }}
+      >
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Languages</th>
+            <th>Area (km²)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filteredData.map((country, index) => (
+            <tr key={index}>
+              <td>{country.name.common}</td>
+              <td>
+                {country.languages
+                  ? Object.values(country.languages).join(", ")
+                  : "N/A"}
+              </td>
+              <td>{country.area.toLocaleString()}</td>
+            </tr>
           ))}
-      </ul>
+        </tbody>
+      </table>
     </div>
   );
-};
+}
 
 export default UseAxios;
