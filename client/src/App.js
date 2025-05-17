@@ -9,6 +9,7 @@ import "./App.css";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
 
   const ProtectedRoute = ({ children }) => {
     if (!isAuthenticated) {
@@ -19,11 +20,16 @@ function App() {
 
   return (
     <Router>
-      <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated} />
+      <Navbar 
+        isAuthenticated={isAuthenticated} 
+        setIsAuthenticated={setIsAuthenticated}
+        currentUser={currentUser}
+        setCurrentUser={setCurrentUser}
+      />
       <Routes>
-        <Route path="/dang-nhap" element={<Login setIsAuthenticated={setIsAuthenticated} />} />
+        <Route path="/dang-nhap" element={<Login setIsAuthenticated={setIsAuthenticated} setCurrentUser={setCurrentUser} />} />
         <Route path="/bai-viet" element={<PostList />} />
-        <Route path="/bai-viet/:id" element={<PostDetail />} />
+        <Route path="/bai-viet/:slug" element={<PostDetail isAuthenticated={isAuthenticated} currentUser={currentUser} />} />
         <Route 
           path="/tao-bai-viet" 
           element={

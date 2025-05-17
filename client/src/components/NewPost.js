@@ -16,7 +16,7 @@ function NewPost() {
         return;
       }
 
-      await axios.post("http://localhost:8080/api/posts", post, {
+      await axios.post("http://localhost:4000/api/posts", post, {
         headers: { Authorization: `Bearer ${token}` }
       });
       navigate("/bai-viet");

@@ -10,7 +10,7 @@ function Login({ setIsAuthenticated }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:8080/api/login", credentials);
+      const response = await axios.post("http://localhost:4000/api/login", credentials);
       localStorage.setItem("token", response.data.token);
       setIsAuthenticated(true);
       navigate("/bai-viet");
